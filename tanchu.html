@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<title>弹出层</title>
+	<style>
+		.return{
+			height: 50px;
+			border-radius: 25px;
+      width: 16%;
+      position: fixed;
+      top: 80%;
+      left: 40%;
+      left: 0;
+      right: 0;
+      margin: auto;
+      z-index: 999999;
+      /*border:1px solid blue;*/
+      background: transparent !important;
+		}
+    .hint{
+      font-size: 42px;
+      color: #909;
+      text-align: center;
+    }
+    /*弹出窗口*/
+    .g-plugin-confirm {
+        position: fixed;
+        z-index: 9999999999999;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        /*background: rgba(0, 0, 0, 0.1);*/
+        background-color: rgba(0 ,0, 0, 0.35);
+        justify-content: center;
+        align-items: center;
+    }
+    /* line 397, global.sass */
+    .g-plugin-confirm > div {
+        background: rgba(255, 255, 255, 0.9);
+        width: 80%;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        border-radius: 10px;
+    }
+    /* line 402, global.sass */
+    .g-plugin-confirm > div > div:nth-child(1) {
+        text-align: center;
+        color: black;
+        padding: 22px;
+    }
+    /* line 406, global.sass */
+    .g-plugin-confirm > div > div:nth-child(2) {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        border-top: 1px solid #cbcbd1;
+    }
+    /* line 409, global.sass */
+    .g-plugin-confirm > div > div:nth-child(2) a {
+        -moz-box-flex: 1;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        border-right: 1px solid #cbcbd1;
+        text-align: center;
+        padding: 8px 0;
+        color: #3bbec0;
+        font-size: 22px;
+        text-decoration: none;
+    }
+    /* line 416, global.sass */
+    .g-plugin-confirm > div > div:nth-child(2) a:last-child {
+        border-right: 0;
+    }
+	</style>
+</head>
+<body>
+  <div class="hint"></div>
+	<button type="submit" class="return">弹出</button>
+</body>
+<script>
+	//自定义仿iphone弹出层
+    (function ($) {
+        //ios confirm box
+        jQuery.fn.confirm = function (title, option, okCall, cancelCall) {
+            var defaults = {
+                title: null, //what text
+                cancelText: '取消', //the cancel btn text
+                okText: '确定' //the ok btn text
+            };
+
+            if (undefined === option) {
+                option = {};
+            }
+            if ('function' != typeof okCall) {
+                okCall = $.noop;
+            }
+            if ('function' != typeof cancelCall) {
+                cancelCall = $.noop;
+            }
+
+            var o = $.extend(defaults, option, {title: title, okCall: okCall, cancelCall: cancelCall});
+
+            var $dom = $(this);
+
+            var dom = $('<div class="g-plugin-confirm">');
+            var dom1 = $('<div>').appendTo(dom);
+            var dom_content = $('<div>').html(o.title).appendTo(dom1);
+            var dom_btn = $('<div>').appendTo(dom1);
+            var btn_cancel = $('<a href="#"></a>').html(o.cancelText).appendTo(dom_btn);
+            var btn_ok = $('<a href="#"></a>').html(o.okText).appendTo(dom_btn);
+            btn_cancel.on('click', function (e) {
+                o.cancelCall();
+                dom.remove();
+                e.preventDefault();
+            });
+            btn_ok.on('click', function (e) {
+                o.okCall();
+                dom.remove();
+                e.preventDefault();
+            });
+
+            dom.appendTo($('body'));
+            return $dom;
+        };
+    })(jQuery);
+    $(".return").bind("touchend",function(){
+    	$(document).confirm('进入',{},function(){
+    		$(".hint").html("welcome");
+    	})
+    })
+</script>
+</html>
